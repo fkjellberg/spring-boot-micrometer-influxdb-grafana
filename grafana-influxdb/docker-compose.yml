@@ -1,0 +1,37 @@
+version: "3"
+services:
+  grafana:
+    image: grafana/grafana:6.6.2
+    container_name: grafana
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - monitoring
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+      - grafana-volume:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: grafana
+      GF_SECURITY_ADMIN_PASSWORD: grafana
+
+  influxdb:
+    image: influxdb:1.7.10-alpine
+    container_name: influxdb
+    restart: always
+    ports:
+      - 8086:8086
+    networks:
+      - monitoring
+    volumes:
+      - influxdb-volume:/var/lib/influxdb
+
+networks:
+  monitoring:
+
+volumes:
+  grafana-volume:
+    external: true
+
+  influxdb-volume:
+    external: true
